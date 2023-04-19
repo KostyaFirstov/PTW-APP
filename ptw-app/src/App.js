@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 function App() {
+	const [theme, setTheme] = useState(() => {
+		return JSON.parse(localStorage.getItem('theme:')) || false
+	})
+
+	const changeTheme = mode => {
+		setTheme(mode === 'dark' ? true : false)
+	}
+
+	useEffect(() => {
+		localStorage.setItem('theme:', JSON.stringify(theme))
+	}, [theme])
+
+	console.log(localStorage)
+
 	return (
-		<div className='App flex'>
+		<div className={theme ? 'App flex darkmode' : 'App flex'}>
 			<div className='side-menu flex-none w-20 flex bg-dark flex-col place-items-center py-8 place-content-between'>
 				<div className='header'>
 					<div className='logo'>
@@ -253,7 +267,10 @@ function App() {
 					</div>
 				</div>
 				<div className='advanced-menu__theme flex place-content-between bg-grayLite rounded p-2'>
-					<div className='advanced-menu__theme-item active advanced-menu__theme-light flex items-center rounded-normal py-1 px-7'>
+					<div
+						className='advanced-menu__theme-item active advanced-menu__theme-light flex items-center rounded-normal py-1 px-7'
+						onClick={() => changeTheme('light')}
+					>
 						<svg
 							width='20'
 							height='20'
@@ -268,7 +285,10 @@ function App() {
 						</svg>
 						<span className='ml-2'>Light</span>
 					</div>
-					<div className='advanced-menu__theme-item advanced-menu__theme-dark flex items-center rounded-normal py-1 px-7'>
+					<div
+						className='advanced-menu__theme-item advanced-menu__theme-dark flex items-center rounded-normal py-1 px-7'
+						onClick={() => changeTheme('dark')}
+					>
 						<svg
 							width='20'
 							height='20'
@@ -285,7 +305,13 @@ function App() {
 						</svg>
 						<span className='ml-2'>Dark</span>
 					</div>
-					<div className='advanced-menu__theme-scrollbar'></div>
+					<div
+						className={
+							theme
+								? 'advanced-menu__theme-scrollbar full'
+								: 'advanced-menu__theme-scrollbar'
+						}
+					></div>
 				</div>
 			</div>
 			<div className='grow py-8 px-8'>

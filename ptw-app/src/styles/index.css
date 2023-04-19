@@ -7,6 +7,41 @@ body {
 	font-family: 'Exo 2', sans-serif;
 }
 
+.darkmode {
+	color: #fff;
+	background-color: #1c1d22;
+}
+.darkmode,
+.darkmode .working__task {
+	background-color: #24262c;
+}
+.darkmode .working__settings {
+	background-color: rgba(36, 38, 44, 0.96);
+}
+.darkmode .working__setting-scrollbar,
+.darkmode .task__progressbar {
+	background: rgba(255, 255, 255, 0.1);
+}
+.darkmode .working__task {
+	border: #24262c;
+	background-color: #292b31;
+}
+.darkmode .working__template {
+	border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+.darkmode .working___setting-progress {
+	background-color: #fff;
+}
+.darkmode .advanced-menu {
+	background-color: #222327;
+}
+.darkmode .advanced-menu__theme-scrollbar {
+	background: rgba(255, 255, 255, 0.06);
+}
+.darkmode .advanced-menu__theme {
+	background: rgba(255, 255, 255, 0.04);
+}
+
 .side-menu,
 .advanced-menu {
 	position: sticky;
@@ -56,13 +91,17 @@ body {
 .advanced-menu__theme-scrollbar {
 	position: absolute;
 	background-color: #fff;
-	width: 45%;
+	width: calc(50% - 5px);
 	height: calc(100% - 10px);
 	left: 6px;
 	top: 50%;
-	transform: translateY(-50%);
+	transform: translate(0, -50%);
 	border-radius: 18px;
 	z-index: -1;
+	transition: 0.45s ease;
+}
+.advanced-menu__theme-scrollbar.full {
+	transform: translate(100%, -50%);
 }
 .advanced-menu__links {
 	margin-top: 40px;
