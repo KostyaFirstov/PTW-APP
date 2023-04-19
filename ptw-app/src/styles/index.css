@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700&display=swap');
+
+body {
+	font-family: 'Exo 2', sans-serif;
+}
+
+.side-menu,
+.advanced-menu {
+	position: sticky;
+	top: 0;
+	height: 100%;
+	min-height: 100vh;
+}
+.menu {
+	margin-top: 48px;
+}
+.menu__link {
+	width: 48px;
+	height: 48px;
+	border-radius: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.45s ease;
+	cursor: pointer;
+	margin-top: 15px;
+}
+.menu__link:first-of-type {
+	margin-top: 0;
+}
+.menu__link:hover,
+.menu__link.active {
+	background-color: #ffffff1a;
+}
+.advanced-menu {
+	box-shadow: 40px 180px 80px rgba(28, 29, 34, 0.06);
+	width: 18rem;
+}
+.advanced-menu__btn {
+	border-radius: 100%;
+}
+.advanced-menu__theme {
+	position: relative;
+	z-index: 5;
+}
+.advanced-menu__theme-item {
+	opacity: 0.5;
+	cursor: pointer;
+}
+.advanced-menu__theme-item.active {
+	opacity: 1;
+}
+.advanced-menu__theme-scrollbar {
+	position: absolute;
+	background-color: #fff;
+	width: 45%;
+	height: calc(100% - 10px);
+	left: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+	border-radius: 18px;
+	z-index: -1;
+}
+.advanced-menu__links {
+	margin-top: 40px;
+}
+.advanced-menu__tab:first-of-type {
+	margin-top: 0;
+}
+.advanced-menu__tab {
+	cursor: pointer;
+	margin-top: 20px;
+}
+.task__main {
+	position: relative;
+}
+.working__settings {
+	position: sticky;
+	top: 0;
+	background-color: rgba(255, 255, 255, 0.75);
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+	z-index: 1000;
+}
+.working__setting button {
+	transition: 0.45s ease;
+}
+.working__setting button:hover {
+	opacity: 0.75;
+}
+.task__progressbar,
+.working__setting-scrollbar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+.task__progressbar {
+	height: 4px;
+}
+.working__setting-scrollbar {
+	height: 2px;
+}
+.task__progressline,
+.working___setting-progress {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20%;
+	height: 100%;
+	border-radius: 2px;
+}
+.working__template {
+	border: 2px dashed rgba(28, 29, 34, 0.08);
+}
+.working__task:first-of-type {
+	margin-top: 0;
+}
+.working__task {
+	margin-top: 14px;
+}
+.working__templates {
+}
