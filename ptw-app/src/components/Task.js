@@ -1,14 +1,12 @@
 import React from 'react'
 
-export default function Task() {
+export default function Task({ title, desc, deadline }) {
 	return (
 		<div className='working__task bg-white border-2 border-grayLite rounded-sm p-5'>
 			<div className='task__header flex items-center justify-between pb-2'>
 				<div className='task__info'>
-					<div className='task__name text-xl font-semibold'>
-						Design new ui presentation
-					</div>
-					<div className='task__desc text-gray'>Dribble marketing</div>
+					<div className='task__name text-xl font-semibold'>{title}</div>
+					<div className='task__desc text-gray'>{desc}</div>
 				</div>
 				<div className='task__options'>
 					<svg
@@ -26,8 +24,8 @@ export default function Task() {
 							height='24'
 							rx='12'
 							stroke='#1C1D22'
-							stroke-opacity='0.1'
-							stroke-width='2'
+							strokeOpacity='0.1'
+							strokeWidth='2'
 						/>
 						<circle cx='17' cy='13' r='1' fill='#1C1D22' />
 						<circle cx='13' cy='13' r='1' fill='#1C1D22' />
@@ -64,7 +62,7 @@ export default function Task() {
 			</div>
 			<div className='task__footer pt-3 flex justify-between'>
 				<div className='task__dedline'>
-					<span>10 May 2023</span>
+					<span>{deadline}</span>
 				</div>
 				<div className='task__chat flex items-center'>
 					<svg
