@@ -3,6 +3,8 @@ import Home from './components/Home'
 import AdvancedMenu from './components/AdvancedMenu'
 import SideMenu from './components/SideMenu'
 import Auth from './components/Auth'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function App() {
 	const [theme, setTheme] = useState(() => {
@@ -18,12 +20,14 @@ function App() {
 	}, [theme])
 
 	return (
-		<div className={theme ? 'App flex darkmode' : 'App flex'}>
-			<SideMenu />
-			<AdvancedMenu changeTheme={changeTheme} theme={theme} />
-			<Home />
-			{/* <Auth /> */}
-		</div>
+		<DndProvider backend={HTML5Backend}>
+			<div className={theme ? 'App flex darkmode' : 'App flex'}>
+				<SideMenu />
+				<AdvancedMenu changeTheme={changeTheme} theme={theme} />
+				<Home />
+				{/* <Auth /> */}
+			</div>
+		</DndProvider>
 	)
 }
 

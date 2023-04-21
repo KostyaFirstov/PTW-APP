@@ -45,6 +45,20 @@ export default function Modal({ onSubmit, toggleModal }) {
 						{errors.desc && <ErrorProduct error={errors.desc.message} />}
 					</div>
 					<div className='form__input'>
+						<label className='form__label' htmlFor='status'>
+							Status
+						</label>
+						<input
+							type='text'
+							className='border p-2 mb-2 w-full outline-0 rounded-sm'
+							id='status'
+							{...register('status', {
+								required: 'Status is require field'
+							})}
+						/>
+						{errors.status && <ErrorProduct error={errors.status.message} />}
+					</div>
+					<div className='form__input'>
 						<label className='form__label' htmlFor='date'>
 							Deadline
 						</label>

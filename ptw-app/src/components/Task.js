@@ -2,13 +2,13 @@ import React from 'react'
 
 export default function Task({ title, desc, deadline }) {
 	return (
-		<div className='working__task bg-white border-2 border-grayLite rounded-sm p-5'>
+		<div className='working__task bg-white border-2 border-grayLite rounded-sm p-4 cursor-grabbing'>
 			<div className='task__header flex items-center justify-between pb-2'>
 				<div className='task__info'>
 					<div className='task__name text-xl font-semibold'>{title}</div>
 					<div className='task__desc text-gray'>{desc}</div>
 				</div>
-				<div className='task__options'>
+				<div className='task__options cursor-pointer'>
 					<svg
 						width='26'
 						height='26'
@@ -35,7 +35,7 @@ export default function Task({ title, desc, deadline }) {
 			</div>
 			<div className='task__main pb-2'>
 				<div className='task__progress flex items-center justify-between'>
-					<div className='task__progress-info flex items-center'>
+					<div className='task__progress-info flex items-center cursor-pointer'>
 						<svg
 							width='16'
 							height='16'
@@ -52,7 +52,7 @@ export default function Task({ title, desc, deadline }) {
 						</svg>
 						<span className='ml-1 text-gray'>Progress</span>
 					</div>
-					<div className='task__progress-steps'>
+					<div className='task__progress-steps cursor-pointer'>
 						<span>7/10</span>
 					</div>
 				</div>
@@ -60,11 +60,13 @@ export default function Task({ title, desc, deadline }) {
 					<div className='task__progressline bg-orange'></div>
 				</div>
 			</div>
-			<div className='task__footer pt-3 flex justify-between'>
+			<div className='task__footer pt-6 flex justify-between'>
 				<div className='task__dedline'>
-					<span>{deadline}</span>
+					<span className='bg-grayLite py-1 px-2 rounded text-gray cursor-default'>
+						{deadline}
+					</span>
 				</div>
-				<div className='task__chat flex items-center'>
+				<div className='task__chat flex items-center cursor-pointer'>
 					<svg
 						width='18'
 						height='18'

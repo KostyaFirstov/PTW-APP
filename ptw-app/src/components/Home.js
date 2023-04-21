@@ -1,24 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import Template from './Template'
 import Modal from './Modal'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../config/firebase'
-import { getDocs, collection } from 'firebase/firestore'
 
 export default function Home() {
-	const [templates, setTemaplate] = useState([])
-	const [modal, setModal] = useState(false)
+	const templates = [
+		{ title: 'To do' },
+		{ title: 'In progress' },
+		{ title: 'Done' }
+	]
 
-	const templatesCollectionRef = collection(db, 'templates')
+	const [tasks, setTasks] = useState([])
+	const [modal, setModal] = useState(false)
+	const [todos, setTodos] = useState([])
+	const [inProgress, setInProgress] = useState([])
+	const [done, setDone] = useState([])
+
+	const tasksCollectionRef = collection(db, 'tasks')
 
 	useEffect(() => {
 		const getTemplates = async () => {
 			try {
-				const data = await getDocs(templatesCollectionRef)
+				const data = await getDocs(tasksCollectionRef)
 				const filtredData = data.docs.map(doc => ({
 					...doc.data(),
 					id: doc.id
 				}))
-				setTemaplate(filtredData)
+
+				const findTodos = filtredData.filter(tasks => tasks.status === 'todo')
+				const findInProgress = filtredData.filter(
+					tasks => tasks.status === 'inprogress'
+				)
+				const findDone = filtredData.filter(tasks => tasks.status === 'done')
+
+				setTodos(findTodos)
+				setInProgress(findInProgress)
+				setDone(findDone)
 			} catch (error) {
 				alert(error)
 			}
@@ -31,12 +49,14 @@ export default function Home() {
 		setModal(prev => !prev)
 	}
 
-	const onSubmit = ({ title }) => {
-		const templatesTask = {
-			title: title
+	const onSubmit = async ({ title }) => {
+		try {
+			const templatesTask = {
+				title: title
+			}
+		} catch (error) {
+			alert(error)
 		}
-
-		setTemaplate(() => [...templates, templatesTask])
 	}
 
 	return (
@@ -113,47 +133,13 @@ export default function Home() {
 								<span className='ml-2 text-xl'>Board view</span>
 							</button>
 						</div>
-						<div className='working__board ml-4'>
-							<button className='flex items-center opacity-50'>
-								<svg
-									width='18'
-									height='18'
-									viewBox='0 0 18 18'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<circle
-										cx='9'
-										cy='9'
-										r='9'
-										fill='#1C1D22'
-										fillOpacity='0.08'
-									/>
-									<g opacity='0.4'>
-										<path
-											d='M12 9H6'
-											stroke='#1C1D22'
-											strokeWidth='2'
-											strokeLinecap='round'
-										/>
-										<path
-											d='M9 12L9 6'
-											stroke='#1C1D22'
-											strokeWidth='2'
-											strokeLinecap='round'
-										/>
-									</g>
-								</svg>
-								<span className='ml-2 text-xl'>Add view</span>
-							</button>
-						</div>
 					</div>
 					<div className='working__setting'>
 						<button
-							className='bg-dark py-2 px-8 rounded text-white'
+							className='bg-dark py-2 px-10 rounded text-white'
 							onClick={toggleModal}
 						>
-							New template
+							New board
 						</button>
 					</div>
 					<div className='working__setting-scrollbar bg-grayLite'>
@@ -161,9 +147,27 @@ export default function Home() {
 					</div>
 				</div>
 				<div className='working__templates pt-6 flex gap-4'>
-					{templates.map((item, index) => {
-						return <Template key={index} title={item.title} />
-					})}
+					<Template
+						key={1}
+						title='To do'
+						tasks={todos}
+						setTasks={setTodos}
+						tasksCollectionRef={tasksCollectionRef}
+					/>
+					<Template
+						key={2}
+						title='In progress'
+						tasks={inProgress}
+						setTasks={setInProgress}
+						tasksCollectionRef={tasksCollectionRef}
+					/>
+					<Template
+						key={3}
+						title='Done'
+						tasks={done}
+						setTasks={setDone}
+						tasksCollectionRef={tasksCollectionRef}
+					/>
 				</div>
 			</div>
 		</>

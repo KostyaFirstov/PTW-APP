@@ -206,3 +206,6 @@ body {
 	border-radius: 100%;
 	overflow: hidden;
 }
+.working__templates {
+	align-items: baseline;
+}

@@ -1,37 +1,49 @@
 import React, { useState } from 'react'
 import Task from './Task'
 import Modal from './Modal'
+import { addDoc } from 'firebase/firestore'
+import dateformat from 'dateformat'
 
-export default function Template(props) {
-	const [tasks, setTask] = useState([])
+export default function Template({
+	title,
+	tasks,
+	setTasks,
+	tasksCollectionRef
+}) {
 	const [modal, setModal] = useState(false)
 
 	const toggleModal = () => {
 		setModal(prev => !prev)
 	}
 
-	const onSubmit = ({ deadline, desc, title }) => {
+	const onAddTask = async ({ deadline, desc, title, status }) => {
 		const dataTask = {
-			deadline: deadline,
+			deadline: dateformat(deadline, 'd mmm yyyy'),
 			desc: desc,
 			title: title
 		}
+		await addDoc(tasksCollectionRef, {
+			title: title,
+			desc: desc,
+			deadline: dateformat(deadline, 'd mmm yyyy'),
+			status: status
+		})
 
-		setTask(() => [...tasks, dataTask])
+		setTasks(() => [...tasks, dataTask])
 	}
 
 	return (
 		<>
-			{modal && <Modal toggleModal={toggleModal} onSubmit={onSubmit} />}
+			{modal && <Modal toggleModal={toggleModal} onSubmit={onAddTask} />}
 			<div className='working__template grow rounded p-4'>
 				<div className='template__header flex justify-between items-center mb-2'>
-					<div className='template__name opacity-50 text-lg'>
+					<div className='template__name opacity-50 text-base'>
 						<span>
-							{props.title} ({tasks.length})
+							{title} ({tasks.length})
 						</span>
 					</div>
 					<div
-						className='template__add flex items-center text-lg'
+						className='template__add flex items-center'
 						onClick={toggleModal}
 					>
 						<svg
