@@ -21,7 +21,7 @@ function App() {
 
 	return (
 		<DndProvider backend={HTML5Backend}>
-			<div className={theme ? 'App flex darkmode' : 'App flex'}>
+			<div className={`App flex ${theme ? 'darkmode' : ''}`}>
 				<SideMenu />
 				<AdvancedMenu changeTheme={changeTheme} theme={theme} />
 				<Home />

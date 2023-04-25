@@ -1,45 +1,94 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Task from './Task'
 import Modal from './Modal'
-import { addDoc } from 'firebase/firestore'
-import dateformat from 'dateformat'
+import { useDrop } from 'react-dnd'
+import { v4 as uuidv4 } from 'uuid'
+import dateFormat from 'dateformat'
 
-export default function Template({
-	title,
-	tasks,
-	setTasks,
-	tasksCollectionRef
-}) {
+export default function Template({ title, status, tasks, setTasks, date }) {
 	const [modal, setModal] = useState(false)
+	const [todos, setTodos] = useState([])
+	const [inProgress, setInProgress] = useState([])
+	const [done, setDone] = useState([])
 
 	const toggleModal = () => {
 		setModal(prev => !prev)
 	}
 
+	const [{ isOver }, drop] = useDrop(() => ({
+		accept: 'task',
+		drop: item => addItemToTemplate(item.id),
+		collect: monitor => ({
+			isOver: !!monitor.isOver()
+		})
+	}))
+
 	const onAddTask = async ({ deadline, desc, title, status }) => {
 		const dataTask = {
-			deadline: dateformat(deadline, 'd mmm yyyy'),
-			desc: desc,
-			title: title
-		}
-		await addDoc(tasksCollectionRef, {
 			title: title,
 			desc: desc,
-			deadline: dateformat(deadline, 'd mmm yyyy'),
-			status: status
-		})
+			deadline: dateFormat(deadline, 'd mmm yyyy'),
+			status: status,
+			id: uuidv4()
+		}
 
-		setTasks(() => [...tasks, dataTask])
+		setTasks(prev => {
+			const list = [...prev, dataTask]
+			localStorage.setItem('tasks', JSON.stringify(list))
+
+			return list
+		})
+	}
+
+	useEffect(() => {
+		const findTodos = tasks.filter(tasks => tasks.status === 'todo')
+		const findInProgress = tasks.filter(tasks => tasks.status === 'inprogress')
+		const findDone = tasks.filter(tasks => tasks.status === 'done')
+
+		setTodos(findTodos)
+		setInProgress(findInProgress)
+		setDone(findDone)
+	}, [tasks])
+
+	const addItemToTemplate = id => {
+		setTasks(prev => {
+			const mTasks = prev.map(t => {
+				if (t.id === id) {
+					console.log({ ...t, status: status })
+					return { ...t, status: status }
+				}
+
+				return t
+			})
+
+			localStorage.setItem('tasks', JSON.stringify(mTasks))
+
+			return mTasks
+		})
+	}
+
+	let taskToMap = todos
+
+	if (status === 'inprogress') {
+		taskToMap = inProgress
+	}
+	if (status === 'done') {
+		taskToMap = done
 	}
 
 	return (
 		<>
 			{modal && <Modal toggleModal={toggleModal} onSubmit={onAddTask} />}
-			<div className='working__template grow rounded p-4'>
+			<div
+				ref={drop}
+				className={`working__template grow rounded p-4 ${
+					isOver ? 'min-h-[100vh]' : ''
+				}`}
+			>
 				<div className='template__header flex justify-between items-center mb-2'>
 					<div className='template__name opacity-50 text-base'>
 						<span>
-							{title} ({tasks.length})
+							{title} ({taskToMap.length})
 						</span>
 					</div>
 					<div
@@ -72,13 +121,15 @@ export default function Template({
 						<span className='ml-2'>Add new task</span>
 					</div>
 				</div>
-				{tasks.map((item, index) => {
+				{taskToMap.map((item, index) => {
 					return (
 						<Task
 							key={index}
 							title={item.title}
 							desc={item.desc}
 							deadline={item.deadline}
+							date={date}
+							id={item.id}
 						/>
 					)
 				})}

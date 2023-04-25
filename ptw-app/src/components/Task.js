@@ -1,8 +1,22 @@
 import React from 'react'
+import { useDrag } from 'react-dnd'
 
-export default function Task({ title, desc, deadline }) {
+export default function Task({ title, desc, deadline, id, date }) {
+	const [{ isDragging }, drag] = useDrag(() => ({
+		type: 'task',
+		item: { id },
+		collect: monitor => ({
+			isDragging: !!monitor.isDragging()
+		})
+	}))
+
 	return (
-		<div className='working__task bg-white border-2 border-grayLite rounded-sm p-4 cursor-grabbing'>
+		<div
+			ref={drag}
+			className={`working__task bg-white border-2 border-grayLite rounded-sm p-4 cursor-grabbing ${
+				isDragging ? 'opacity-25' : 'opacity-100'
+			}`}
+		>
 			<div className='task__header flex items-center justify-between pb-2'>
 				<div className='task__info'>
 					<div className='task__name text-xl font-semibold'>{title}</div>
@@ -62,7 +76,11 @@ export default function Task({ title, desc, deadline }) {
 			</div>
 			<div className='task__footer pt-6 flex justify-between'>
 				<div className='task__dedline'>
-					<span className='bg-grayLite py-1 px-2 rounded text-gray cursor-default'>
+					<span
+						className={`${
+							date - deadline < 5 ? 'bg-red' : 'bg-grayLite'
+						} py-1 px-2 rounded text-gray cursor-default`}
+					>
 						{deadline}
 					</span>
 				</div>
