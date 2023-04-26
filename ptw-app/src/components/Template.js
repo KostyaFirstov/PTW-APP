@@ -23,13 +23,14 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 		})
 	}))
 
-	const onAddTask = async ({ deadline, desc, title, status }) => {
+	const onAddTask = async ({ deadline, desc, title, status, color }) => {
 		const dataTask = {
 			title: title,
 			desc: desc,
 			deadline: dateFormat(deadline, 'd mmm yyyy'),
 			status: status,
-			id: uuidv4()
+			id: uuidv4(),
+			color: 'Gray'
 		}
 
 		setTasks(prev => {
@@ -50,11 +51,12 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 		setDone(findDone)
 	}, [tasks])
 
+	console.log(tasks)
+
 	const addItemToTemplate = id => {
 		setTasks(prev => {
 			const mTasks = prev.map(t => {
 				if (t.id === id) {
-					console.log({ ...t, status: status })
 					return { ...t, status: status }
 				}
 
@@ -121,15 +123,19 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 						<span className='ml-2'>Add new task</span>
 					</div>
 				</div>
-				{taskToMap.map((item, index) => {
+				{taskToMap.map(item => {
 					return (
 						<Task
-							key={index}
+							key={item.id}
 							title={item.title}
 							desc={item.desc}
 							deadline={item.deadline}
 							date={date}
 							id={item.id}
+							toggleModal={toggleModal}
+							onSubmit={onAddTask}
+							tasks={tasks}
+							setTasks={setTasks}
 						/>
 					)
 				})}

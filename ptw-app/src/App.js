@@ -5,6 +5,7 @@ import SideMenu from './components/SideMenu'
 import Auth from './components/Auth'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { RouterProvider } from 'react-router-dom'
 
 function App() {
 	const [theme, setTheme] = useState(() => {
