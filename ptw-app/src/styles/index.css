@@ -132,25 +132,32 @@ body {
 }
 .task__progressbar,
 .working__setting-scrollbar {
-	position: absolute;
 	bottom: 0;
 	left: 0;
 	width: 100%;
 }
 .task__progressbar {
+	position: relative;
 	height: 4px;
 }
 .working__setting-scrollbar {
 	height: 2px;
+	position: absolute;
 }
 .task__progressline,
 .working___setting-progress {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 20%;
 	height: 100%;
 	border-radius: 2px;
+	transition: 0.45s ease;
+}
+.task__progressline.-length {
+	width: 0 !important;
+}
+.working___setting-progress {
+	width: 20%;
 }
 .working__template {
 	border: 2px dashed rgba(28, 29, 34, 0.08);
@@ -160,8 +167,6 @@ body {
 }
 .working__task {
 	margin-top: 14px;
-}
-.working__templates {
 }
 .options__item-dropdown-link,
 .template__add {
@@ -244,4 +249,23 @@ body {
 }
 .working__templates {
 	align-items: baseline;
+}
+.tasks__row-info {
+	height: 100%;
+	padding: 40px;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.task__desc {
+	max-width: 200px;
+}
+.task__desc.card {
+	max-height: 50px;
+	overflow: hidden;
+}
+.tasks__column-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }

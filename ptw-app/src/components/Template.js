@@ -4,6 +4,7 @@ import Modal from './Modal'
 import { useDrop } from 'react-dnd'
 import { v4 as uuidv4 } from 'uuid'
 import dateFormat from 'dateformat'
+import CreateTaskForm from './CreateTaskForm'
 
 export default function Template({ title, status, tasks, setTasks, date }) {
 	const [modal, setModal] = useState(false)
@@ -23,14 +24,14 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 		})
 	}))
 
-	const onAddTask = async ({ deadline, desc, title, status, color }) => {
+	const onAddTask = async ({ deadline, desc, title, status, steps }) => {
 		const dataTask = {
 			title: title,
 			desc: desc,
 			deadline: dateFormat(deadline, 'd mmm yyyy'),
 			status: status,
 			id: uuidv4(),
-			color: 'Gray'
+			steps: steps
 		}
 
 		setTasks(prev => {
@@ -50,8 +51,6 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 		setInProgress(findInProgress)
 		setDone(findDone)
 	}, [tasks])
-
-	console.log(tasks)
 
 	const addItemToTemplate = id => {
 		setTasks(prev => {
@@ -80,7 +79,11 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 
 	return (
 		<>
-			{modal && <Modal toggleModal={toggleModal} onSubmit={onAddTask} />}
+			{modal && (
+				<Modal toggleModal={toggleModal}>
+					<CreateTaskForm onAddTask={onAddTask} />
+				</Modal>
+			)}
 			<div
 				ref={drop}
 				className={`working__template grow rounded p-4 ${
@@ -127,15 +130,12 @@ export default function Template({ title, status, tasks, setTasks, date }) {
 					return (
 						<Task
 							key={item.id}
-							title={item.title}
-							desc={item.desc}
-							deadline={item.deadline}
 							date={date}
-							id={item.id}
 							toggleModal={toggleModal}
 							onSubmit={onAddTask}
 							tasks={tasks}
 							setTasks={setTasks}
+							{...item}
 						/>
 					)
 				})}

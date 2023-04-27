@@ -1,81 +1,13 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
-import ErrorProduct from './ErrorProduct'
 
-export default function Modal({ onSubmit, toggleModal }) {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm()
-
+export default function Modal({ toggleModal, children }) {
 	return (
 		<div
 			className='modal'
 			onClick={event => event.currentTarget === event.target && toggleModal()}
 		>
 			<div className='modal__container rounded relative'>
-				<form action='#' onSubmit={handleSubmit(onSubmit)}>
-					<div className='form__input'>
-						<label className='form__label' htmlFor='title'>
-							Title for to do
-						</label>
-						<input
-							type='text'
-							className='border p-2 mb-2 w-full outline-0 rounded-sm'
-							id='title'
-							{...register('title', {
-								required: 'Title is require field'
-							})}
-						/>
-						{errors.title && <ErrorProduct error={errors.title.message} />}
-					</div>
-					<div className='form__input'>
-						<label className='form__label' htmlFor='desc'>
-							Description
-						</label>
-						<input
-							type='text'
-							className='border p-2 mb-2 w-full outline-0 rounded-sm'
-							id='desc'
-							{...register('desc', {
-								required: 'Desc is require field'
-							})}
-						/>
-						{errors.desc && <ErrorProduct error={errors.desc.message} />}
-					</div>
-					<div className='form__input'>
-						<label className='form__label' htmlFor='status'>
-							Status
-						</label>
-						<input
-							type='text'
-							className='border p-2 mb-2 w-full outline-0 rounded-sm'
-							id='status'
-							{...register('status', {
-								required: 'Status is require field'
-							})}
-						/>
-						{errors.status && <ErrorProduct error={errors.status.message} />}
-					</div>
-					<div className='form__input'>
-						<label className='form__label' htmlFor='date'>
-							Deadline
-						</label>
-						<input
-							type='date'
-							className='border p-2 mb-2 w-full outline-0 rounded-sm'
-							id='date'
-							{...register('deadline', {
-								required: 'Deadline is require field'
-							})}
-						/>
-						{errors.date && <ErrorProduct error={errors.date.message} />}
-					</div>
-					<button className='border py-2 px-4 bg-yellow-400 w-full hover:bg-red-400 rounded-sm'>
-						Create
-					</button>
-				</form>
+				{children}
 				<button
 					className='modal-btn absolute top-0 right-0 z-10'
 					onClick={toggleModal}

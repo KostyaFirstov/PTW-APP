@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 import Modal from './Modal'
+import CreateTaskForm from './CreateTaskForm'
 
 export default function Task({
 	title,
 	desc,
 	deadline,
+	steps,
 	id,
-	date,
 	tasks,
 	setTasks
 }) {
 	const [modal, setModal] = useState(false)
 	const [options, setOptions] = useState(false)
 	const [selectedColor, setSelectedColor] = useState(0)
+	const [realisedSteps, setRealisedSteps] = useState([])
 	const colors = ['Gray', 'Orange', 'Green', 'Red']
 
 	const [{ isDragging }, drag] = useDrag(() => ({
@@ -38,9 +40,133 @@ export default function Task({
 		setSelectedColor(index)
 	}
 
+	const addStep = newStep => {
+		setRealisedSteps([...realisedSteps, newStep])
+	}
+
+	const removeStep = step => {
+		const filtredSteps = realisedSteps.filter(item => item.id !== step)
+		setRealisedSteps(filtredSteps)
+	}
+
 	return (
 		<>
-			{modal && <Modal toggleModal={toggleModal} />}
+			{modal && (
+				<Modal toggleModal={toggleModal}>
+					<div className='tasks__row-info'>
+						<div className='tasks__column-info'>
+							<span className='text-xl font-semibold'>Group: {}</span>
+							<div className='task__dedline'>
+								<span
+									className={`
+									  ${colors[selectedColor] === 'Gray' ? 'bg-grayLite' : ''} 
+									  ${colors[selectedColor] === 'Orange' ? 'bg-orangeLite text-orange' : ''}
+									  ${colors[selectedColor] === 'Green' ? 'bg-greenLite text-green' : ''}
+									  ${colors[selectedColor] === 'Red' ? 'bg-red text-powerRed' : ''}
+										py-1 px-2 rounded text-gray cursor-default`}
+								>
+									{deadline}
+								</span>
+							</div>
+						</div>
+						<div className='tasks__column-info'>
+							<div className='task__name text-xl font-semibold'>{title}</div>
+							<div className='task__steps'>
+								<ul className='mt-10 border-'>
+									{steps.map(item => {
+										return (
+											<li
+												key={item.id}
+												className='cursor-pointer my-2 p-2 text-lg  border-b-2 border-grayLite flex justify-between items-center'
+											>
+												{item.step}
+												{!realisedSteps.some(step => step === item) ? (
+													<svg
+														onClick={() => addStep(item)}
+														width='22'
+														height='22'
+														viewBox='0 0 24 24'
+														fill='none'
+														xmlns='http://www.w3.org/2000/svg'
+													>
+														<path
+															d='M23 12C23 18.0752 18.0752 23 12 23C5.92487 23 1 18.0752 1 12C1 5.92487 5.92487 1 12 1C18.0752 1 23 5.92487 23 12Z'
+															stroke='#323232'
+														/>
+														<path
+															d='M8.33337 11.9999L10.3901 14.0566C10.6043 14.2708 10.9514 14.2708 11.1655 14.0566L15.6667 9.55542'
+															stroke='#323232'
+															strokeLinecap='round'
+															strokeLinejoin='round'
+														/>
+													</svg>
+												) : (
+													<svg
+														onClick={() => removeStep(item.id)}
+														width='22'
+														height='22'
+														viewBox='0 0 22 22'
+														fill='none'
+														xmlns='http://www.w3.org/2000/svg'
+													>
+														<path
+															d='M6.55556 11H15.4444M11 21C5.47716 21 1 16.5229 1 11C1 5.47716 5.47716 1 11 1C16.5229 1 21 5.47716 21 11C21 16.5229 16.5229 21 11 21Z'
+															stroke='#323232'
+															strokeLinecap='round'
+															strokeLinejoin='round'
+														/>
+													</svg>
+												)}
+											</li>
+										)
+									})}
+								</ul>
+							</div>
+							<div className='task__column-progressbar flex items-center'>
+								<div className='task__progressbar bg-grayLite'>
+									<div
+										style={{
+											width: `calc(100% * (${
+												realisedSteps.length / steps.length
+											}))`
+										}}
+										className={`
+									${realisedSteps.length < 1 ? '-length' : ''} 
+									${realisedSteps.length === steps.length ? 'bg-green' : 'bg-orange'} 
+									task__progressline`}
+									></div>
+								</div>
+								<div className='task__progress-steps cursor-pointer relative left-4'>
+									<span>
+										{realisedSteps.length}/{steps.length}
+									</span>
+								</div>
+							</div>
+						</div>
+						<div className='tasks__column-info'>
+							<div className='task__desc text-gray'>{desc}</div>
+							<div className='task__chat flex justify-end items-center'>
+								<svg
+									className='cursor-pointer'
+									width='18'
+									height='18'
+									viewBox='0 0 18 18'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<g opacity='0.5'>
+										<path
+											d='M1.5 4.5C1.5 3.67157 2.17157 3 3 3H15C15.8284 3 16.5 3.67157 16.5 4.5V12.75C16.5 13.5784 15.8284 14.25 15 14.25H11.5607L9.53033 16.2803C9.23744 16.5732 8.76256 16.5732 8.46967 16.2803L6.43934 14.25H3C2.17157 14.25 1.5 13.5784 1.5 12.75V4.5ZM15 4.5H3V12.75H6.75C6.94891 12.75 7.13968 12.829 7.28033 12.9697L9 14.6893L10.7197 12.9697C10.8603 12.829 11.0511 12.75 11.25 12.75H15V4.5ZM4.5 7.125C4.5 6.71079 4.83579 6.375 5.25 6.375H12.75C13.1642 6.375 13.5 6.71079 13.5 7.125C13.5 7.53921 13.1642 7.875 12.75 7.875H5.25C4.83579 7.875 4.5 7.53921 4.5 7.125ZM4.5 10.125C4.5 9.71079 4.83579 9.375 5.25 9.375H9.75C10.1642 9.375 10.5 9.71079 10.5 10.125C10.5 10.5392 10.1642 10.875 9.75 10.875H5.25C4.83579 10.875 4.5 10.5392 4.5 10.125Z'
+											fill='#1C1D22'
+										/>
+									</g>
+								</svg>
+								<span className='ml-1 cursor-pointer'>0</span>
+							</div>
+						</div>
+					</div>
+				</Modal>
+			)}
 			<div
 				ref={drag}
 				className={`relative working__task bg-white border-2 border-grayLite rounded-sm p-4 cursor-grabbing ${
@@ -50,7 +176,7 @@ export default function Task({
 				<div className='task__header flex items-center justify-between pb-2'>
 					<div className='task__info'>
 						<div className='task__name text-xl font-semibold'>{title}</div>
-						<div className='task__desc text-gray'>{desc}</div>
+						<div className='task__desc text-gray card'>{desc}</div>
 					</div>
 					<div
 						className='task__options cursor-pointer'
@@ -176,7 +302,7 @@ export default function Task({
 						</div>
 					)}
 				</div>
-				<div className='task__main pb-2'>
+				<div className='task__main mb-6'>
 					<div className='task__progress flex items-center justify-between'>
 						<div className='task__progress-info flex items-center cursor-pointer'>
 							<svg
@@ -198,14 +324,24 @@ export default function Task({
 							</span>
 						</div>
 						<div className='task__progress-steps cursor-pointer'>
-							<span>7/10</span>
+							<span>
+								{realisedSteps.length}/{steps.length}
+							</span>
 						</div>
 					</div>
-					<div className='task__progressbar bg-grayLite'>
-						<div className='task__progressline bg-orange'></div>
+					<div className='task__progressbar mt-3 bg-grayLite'>
+						<div
+							style={{
+								width: `calc(100% * (${realisedSteps.length / steps.length}))`
+							}}
+							className={`
+							${realisedSteps.length < 1 ? '-length' : ''} 
+							${realisedSteps.length === steps.length ? 'bg-green' : 'bg-orange'} 
+							task__progressline`}
+						></div>
 					</div>
 				</div>
-				<div className='task__footer pt-6 flex justify-between'>
+				<div className='task__footer mt-3 flex justify-between'>
 					<div className='task__dedline'>
 						<span
 							className={`${
