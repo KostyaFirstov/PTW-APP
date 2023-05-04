@@ -52,6 +52,9 @@ body {
 .menu {
 	margin-top: 48px;
 }
+.menu li {
+	margin-top: 15px;
+}
 .menu__link {
 	width: 48px;
 	height: 48px;
@@ -61,9 +64,8 @@ body {
 	justify-content: center;
 	transition: 0.45s ease;
 	cursor: pointer;
-	margin-top: 15px;
 }
-.menu__link:first-of-type {
+.menu li:first-of-type {
 	margin-top: 0;
 }
 .menu__link:hover,
@@ -249,6 +251,8 @@ body {
 }
 .working__templates {
 	align-items: baseline;
+	margin-top: 20px;
+	gap: 10px;
 }
 .tasks__row-info {
 	height: 100%;
@@ -268,4 +272,14 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+}
+.calendar__sidebar {
+	max-width: 240px;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+	padding: 10px;
+	border-radius: 10px;
+}
+.calendar {
+	padding-left: 40px;
 }
